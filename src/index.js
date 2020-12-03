@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+/*
+     success:function(result)
+     {
+        $('#print').html(result)
+     }
+ */
 ReactDOM.render(
   <React.StrictMode>
     <App />
