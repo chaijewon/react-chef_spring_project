@@ -29,6 +29,7 @@ class App extends Component{
     }
     this.chefFindData=this.chefFindData.bind(this)
       this.findChange=this.findChange.bind(this);
+    this.btnChefDetailData=this.btnChefDetailData.bind(this);
   }
   findChange(fd)
   {
@@ -53,6 +54,24 @@ class App extends Component{
           // 데이터 갱신 => 브라우저 갱신된 데이터 출력 render()호출
       })
   }
+    btnChefDetailData()
+    {
+        axios({
+            method:'POST',
+            url:'http://localhost:8080/web/react_chef/chef_detail.do',
+            headers:{
+                'Content-type':'application/x-www-form-urlencoding;charset=UTF-8'
+            },
+            params:{
+                chef:this.state.chef_name
+            }
+        }).then((response)=>{
+            console.log(response)
+            this.setState({isShow:1,recipe:response.data})
+            //this.state.chef=response.data
+            // 데이터 갱신 => 브라우저 갱신된 데이터 출력 render()호출
+        })
+    }
   chefDetailData(chef)
   {
       axios({
@@ -147,7 +166,8 @@ class App extends Component{
              </table>
            </div>
            <div className={"col-sm-5"}>
-               {this.state.isShow===1?<ChefDetail recipe={this.state.recipe} onFindChange={this.findChange} onBtnClick={this.chefFindData}/>:null}
+               {this.state.isShow===1?<ChefDetail recipe={this.state.recipe} onFindChange={this.findChange}
+                                                  onBtnClick={this.chefFindData} onTotalClick={this.btnChefDetailData}/>:null}
            </div>
          </div>
      )
@@ -162,6 +182,11 @@ class ChefDetail extends Component{
       }
       this.btnClick=this.btnClick.bind(this);
       this.fdChange=this.fdChange.bind(this);
+      this.totalClick=this.totalClick.bind(this);
+  }
+  totalClick()
+  {
+      this.props.onTotalClick();
   }
   // 상위 클래스의 함수 호출시 => 속성으로 함수명을 전송 => 하위클래스에 사용이 가능
     /*
@@ -199,7 +224,7 @@ class ChefDetail extends Component{
             <div className={"row"}>
               <input type={"text"} className={"input-sm"} size={"20"} onChange={this.fdChange}/>
               <button className={"btn btn-sm btn-primary"} onClick={this.btnClick}>검색</button>
-              <button className={"btn btn-sm btn-danger"}>전체목록</button>
+              <button className={"btn btn-sm btn-danger"} onClick={this.totalClick}>전체목록</button>
             </div>
             <div style={{"height":"20px"}}></div>
             <div className={"row"}>
